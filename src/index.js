@@ -41,13 +41,14 @@ checkbox.addEventListener('change', function(){
     if(this.checked)
     {
         this.nextElementSibling.classList.add('checked');
-        actionPage(true);
+        //actionPage(true);
     }
     else
     {
         this.nextElementSibling.classList.remove('checked');
-        actionPage(false);
+        //actionPage(false);
     }
+    filter();
 })
 function showData()
 {
@@ -83,8 +84,9 @@ function actionPage(display_cheked)
 
 function filterPrce()
 {
-    let goods = document.querySelector('.goods');
-    carts.forEach((card) =>{
+    let goods = document.querySelector('.goods'),
+    cards = document.querySelectorAll('.goods .card');
+    cards.forEach((card) =>{
         let cardPrice = card.querySelector('.card-price'),
         price = parseFloat(cardPrice.textContent);
         if((max.value && price > max.value) || (min.value && price < min.value))
@@ -99,9 +101,10 @@ function filterPrce()
 
 function searchPrice()
 {
-    let goods = document.querySelector('.goods');
-    let text = new RegExp(searchText.value.trim() , 'i');
-    carts.forEach((card) => {
+    let goods = document.querySelector('.goods'),
+    cards = document.querySelectorAll('.goods .card'),
+    text = new RegExp(searchText.value.trim() , 'i');
+    cards.forEach((card) => {
         let title = card.querySelector('.card-title');
         if(!text.test(title.textContent))
         {
@@ -114,8 +117,22 @@ function searchPrice()
     })
 }
 
+function filter()
+{
+    let checked = document.getElementById('discount-checkbox');
+    if(checked.checked)
+    {
+        actionPage(true);
+    }
+    else
+    {
+        actionPage(false);
+    }
+    filterPrce();
+}
+
 searchBtn.addEventListener('click', ()=>{
     searchPrice();
 })
-max.addEventListener('change', filterPrce);
-min.addEventListener('change', filterPrce);
+max.addEventListener('change', filter);
+min.addEventListener('change', filter);
